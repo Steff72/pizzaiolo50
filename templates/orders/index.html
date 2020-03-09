@@ -1,0 +1,234 @@
+{% extends 'base.html' %} {% block title %} | Welcome{% endblock %} {% block content %}
+<!-- Showcase -->
+<section id="showcase">
+  <div class="container text-center">
+    <div class="home-search p-5">
+      <div class="overlay p-5">
+        <h1 class="display-5 mb-4">
+          Today's Special Pizza:
+        </h1>
+        {% if special %}
+        <h1 class="display-4 mb-4">
+          {{ special.name }}
+        </h1>
+        <p class="lead">
+          {{ special.description }}
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+<br />
+
+<!-- menu -->
+<h3 class="text-center">Our Menu</h3>
+<section id="menu">
+  <div class="container py-4">
+    <div class="card">
+      <div class="card-header text-center">
+        <h5>
+          <a href="#collapse1" data-parent="#menu" data-toggle="collapse">
+            Regular Pizza
+          </a>
+        </h5>
+      </div>
+
+      <div id="collapse1" class="collapse show">
+        <div class="card-body">
+          <div class="card-columns">
+            {% if regulars %} {% for regular in regulars %}
+            <div class="card transparent">
+              <div class="card-body">
+                <h5 class="card-title">{{ regular.name }}</h5>
+                <a class="btn btn-sm btn-block btn-outline-secondary mt-2" href="{{ regular.get_url }}">$ {{ regular.price }}</a>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <div class="col-md-12">
+              <p>No Regular Pizza available</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header text-center">
+        <h5>
+          <a href="#collapse2" data-parent="#menu" data-toggle="collapse">
+            Sicilian Pizza
+          </a>
+        </h5>
+      </div>
+
+      <div id="collapse2" class="collapse">
+        <div class="card-body">
+          <div class="card-columns">
+            {% if sicilians %} {% for sicilian in sicilians %}
+            <div class="card transparent">
+              <div class="card-body">
+                <h5 class="card-title">{{ sicilian.name }}</h5>
+                <a class="btn btn-sm btn-block btn-outline-secondary mt-2" href="{{ sicilian.get_url }}">$ {{ sicilian.price }}</a>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <div class="col-md-12">
+              <p>No Sicilian Pizza available</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header text-center">
+        <h5>
+          <a href="#collapse3" data-parent="#menu" data-toggle="collapse">
+            Subs
+          </a>
+        </h5>
+      </div>
+
+      <div id="collapse3" class="collapse">
+        <div class="card-body">
+          <div class="card-columns">
+            {% if subs %} {% for sub in subs %}
+            <div class="card transparent">
+              <div class="card-body">
+                <h5 class="card-title">{{ sub.name }}</h5>
+                <a class="btn btn-sm btn-block btn-outline-secondary mt-2" href="{{ sub.get_url }}">$ {{ sub.price }}</a>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <div class="col-md-12">
+              <p>No Subs available</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header text-center">
+        <h5>
+          <a href="#collapse4" data-parent="#menu" data-toggle="collapse">
+            Pasta
+          </a>
+        </h5>
+      </div>
+
+      <div id="collapse4" class="collapse">
+        <div class="card-body">
+          <div class="card-columns">
+            {% if pastas %} {% for pasta in pastas %}
+            <div class="card transparent">
+              <div class="card-body">
+                <h5 class="card-title">{{ pasta.name }}</h5>
+                <a class="btn btn-sm btn-block btn-outline-secondary mt-2" href="{{ pasta.get_url }}">$ {{ pasta.price }}</a>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <div class="col-md-12">
+              <p>No Pasta available</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header text-center">
+        <h5>
+          <a href="#collapse5" data-parent="#menu" data-toggle="collapse">
+            Salads
+          </a>
+        </h5>
+      </div>
+
+      <div id="collapse5" class="collapse">
+        <div class="card-body">
+          <div class="card-columns">
+            {% if salads %} {% for salad in salads %}
+            <div class="card transparent">
+              <div class="card-body">
+                <h5 class="card-title">{{ salad.name }}</h5>
+                <a class="btn btn-sm btn-block btn-outline-secondary mt-2" href="{{ salad.get_url }}">$ {{ salad.price }}</a>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <div class="col-md-12">
+              <p>No Salad available</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header text-center">
+        <h5>
+          <a href="#collapse6" data-parent="#menu" data-toggle="collapse">
+            Dinner Platter
+          </a>
+        </h5>
+      </div>
+
+      <div id="collapse6" class="collapse">
+        <div class="card-body">
+          <div class="card-columns">
+            {% if dinners %} {% for dinner in dinners %}
+            <div class="card transparent">
+              <div class="card-body">
+                <h5 class="card-title">{{ dinner.name }}</h5>
+                <a class="btn btn-sm btn-block btn-outline-secondary mt-2" href="{{ dinner.get_url }}">$ {{ dinner.price }}</a>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <div class="col-md-12">
+              <p>No Dinner Platter available</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" class="py-5 bg-secondary text-white">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <i class="fas fa-clock fa-4x mr-4"></i>
+        <hr />
+        <h3>Preparation</h3>
+        <p>
+          We can make any of our pizzas in about 10 to 15 minutes.
+        </p>
+      </div>
+      <div class="col-md-4">
+        <i class="fas fa-shopping-basket fa-4x mr-4"></i>
+        <hr />
+        <h3>Take Away or Inhouse</h3>
+        <p>
+          Meals can be eaten in our dining room or taken out.
+        </p>
+      </div>
+      <div class="col-md-4">
+        <i class="fas fa-map-marked fa-4x mr-4"></i>
+        <hr />
+        <h3>Location</h3>
+        <p>
+          Winthrop street right near the corner of JFK Street. Only 2 blocks from the Harvard Square T stop.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

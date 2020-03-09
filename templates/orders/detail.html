@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block title %} | Detail{% endblock %} {% block content %}
+<section id="detail">
+    <div class="container">
+      <div class="row text-center">
+          <div class="col-10 mx-auto col-md-6">
+            <div class="card">
+                <div class="card-header text-dark">
+                  <h4> {{product.category.name}}: {{product.name}} </h4>
+                </div>
+                <div class="card-body">
+                  <form action="{% url 'add_cart' product.id %}" method="POST" class="text-dark">
+                    {% csrf_token %}
+                    {% if product.topping_allowance %}
+                        {% for x in nr_topp %}
+                        <div class="form-group">
+                            <label for="top{{x}}">Choose topping: </label>
+                            <select name="top{{x}}" id="top{{x}}" class="form-control" required>
+                              <option disabled selected value="">Topping</option>
+                              {% for topping in toppings %}
+                              <option value="{{topping.id}}">{{topping}}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        {% endfor %}
+                    {% endif %}
+                    <input type="hidden" name="extra_cheese" value="False">  
+                    {% if product.xtra_cheese_allowance %}
+                    <div class="form-group form-check">
+                        <input type="checkbox" name="extra_cheese" class="form-check-input" id="extra_cheese" value="True">
+                        <label class="form-check-label" for="extra_cheese"> Add extra Cheese, +0.50 cents</label>
+                    </div>
+                    {% endif %}
+                    <input type="submit" value="Add to Cart" class="btn btn-outline-secondary mr-5" />
+                    <a href="{% url 'index' %}" class="btn btn-outline-secondary">Cancel</a>
+                  </form>
+                </div>
+              </div>
+          </div>
+      </div> 
+    </div>
+  </section>
+
+{% endblock %}

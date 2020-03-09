@@ -1,0 +1,106 @@
+{% extends 'base.html' %} {% load static %} {% block title %} | Cart{% endblock %} {% block content %}
+<section id="detail">
+    <div class="container">
+      <div class="row text-center">
+          <div class="col-10 mx-auto">
+            <div class="card mb-5">
+                <div class="card-header text-dark">
+                {% if not cart_items %}
+                  <h4> Your Cart is empty </h4>
+                {% else %}
+                  <h4> Your Cart </h4>
+                {% endif %}
+                </div>
+                {% if cart_items %}
+                <div class="card-body">
+                  <div class="row mx-auto">
+                      <div class="col-12 col-lg-6 text-center">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">
+                                        Your Items
+                                    </th>
+                                </tr>
+                            </thead>
+                            {% for cart_item in cart_items %}
+                            <tr>
+                                <td class="text-left">
+                                    {{ cart_item.product }}
+                                    <br>
+                                    {% if cart_item.topping_1 %}
+                                    {{ cart_item.topping_1 }}
+                                    <br>
+                                    {% endif %}
+                                    {% if cart_item.topping_2 %}
+                                    {{ cart_item.topping_2 }}
+                                    <br>
+                                    {% endif %}
+                                    {% if cart_item.topping_3 %}
+                                    {{ cart_item.topping_3 }}
+                                    <br>
+                                    {% endif %}
+                                    Price: ${{ cart_item.product.price }}
+                                    <br>
+                                    {% if cart_item.extra_cheese %}
+                                    Xtra-Cheese + $0.50
+                                    <br>
+                                    {% endif %}
+                                    Qty: {{ cart_item.quantity }}
+                                    <br>
+                                    {% if cart_item.extra_cheese %}
+                                    ${{ cart_item.sub_total_extra_cheese }}
+                                    {% else %}
+                                    ${{ cart_item.sub_total }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'increase' cart_item.id %}"><i class="fas fa-plus-circle text-secondary"></i></a>
+                                    <a href="{% url 'decrease' cart_item.id %}"><i class="fas fa-minus-circle text-secondary"></i></a>
+                                    <a href="{% url 'remove' cart_item.id %}"><i class="fas fa-trash-alt text-secondary"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                      </div>
+                      <div class="col-12 col-lg-6 text-center">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th colspan="4">
+                                        Check out
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Please check before continuing.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-left">
+                                        Your total is: <strong>${{ total }}</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="mx-auto">
+                            <a href="{% url 'index' %}" class="btn btn-outline-secondary btn-block">
+                                Continue shopping
+                            </a>
+                            <a href="{% url 'index' %}" class="btn btn-outline-danger btn-block">
+                                Confirm order
+                            </a>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+          </div>
+      </div> 
+    </div>
+  </section>
+
+{% endblock %}

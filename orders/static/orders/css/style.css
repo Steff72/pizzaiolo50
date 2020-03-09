@@ -1,0 +1,109 @@
+.btn-secondary {
+  color: #fff !important;
+}
+
+img {
+  width: 100%;
+}
+
+.navbar {
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+#showcase {
+  background: url(../img/showcase.jpg) no-repeat center fixed/cover;
+  position: relative;
+  min-height: 650px;
+  color: #fff;
+  padding-top: 6rem;
+}
+
+#login {
+  background: url(../img/pizza8.jpg) no-repeat center fixed/cover;
+  position: relative;
+  min-height: 650px;
+  color: #fff;
+  padding-top: 6rem;
+}
+
+#detail {
+  background: url(../img/pizza3.jpg) no-repeat center fixed/cover;
+  position: relative;
+  min-height: 650px;
+  color: #fff;
+  padding-top: 6rem;
+}
+
+#menu a {
+  color: black;
+}
+
+.transparent {
+  opacity: 0.8;
+}
+
+#collapse1 {
+  background: url(../img/pizza4.jpg) top center;
+  background-size: cover;
+
+}
+
+#collapse2 {
+  background: url(../img/pizza9.jpg)  top center;
+  background-size: cover;
+
+}
+
+#collapse3 {
+  background: url(../img/sub2.jpg) top center;
+  background-size: cover;
+
+}
+
+#collapse4 {
+  background: url(../img/pasta3.jpg) top center;
+  background-size: cover;
+
+}
+
+#collapse5, #detail_Salad {
+  background: url(../img/salad2.png) top center;
+  background-size: cover;
+}
+
+#collapse6 {
+  background: url(../img/salad1.jpg) top center;
+  background-size: cover;
+}
+
+#showcase .home-search {
+  min-height: 400px;
+  position: relative;
+  border-radius: 5px;
+}
+#showcase .overlay {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 400px;
+  width: 100%;
+  background: rgba(51, 51, 51, 0.8);
+}
+
+#services {
+  background: url(../img/pizza6.jpg) no-repeat top center fixed/cover;
+  min-height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+#services::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 100%;
+  width: 100%;
+  background: rgba(70, 42, 10, 0.8);
+}
