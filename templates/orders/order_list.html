@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% load static %} {% block title %} | Order list{% endblock %} {% block content %}
+<section id="order_list">
+    <div class="container">
+      <div class="row text-center">
+          <div class="col-10 mx-auto">
+            <div class="card mb-5">
+                <div class="card-header text-dark">
+                  <h5>Open Order List</h5>
+                </div>
+                {%  if not open_orders %}
+                <div class="card-body text-dark">
+                   There are no open Orders.
+                </div>
+                {% endif %}
+            </div>
+            {% for open_order in open_orders %}
+            <div class="card mb-3">
+                <div class="card-header text-dark d-flex justify-content-between">
+                    <b>Order: {{ open_order.id }}</b>
+                    <span>at: {{ open_order.created|date:"d M Y H:m" }}</span>
+                    <span>by: {{ open_order.emailAddress }}</span>
+                    <span>Total: ${{ open_order.total }}</span>
+                </div>
+                <div class="card-body text-dark">
+                    <ul>
+                        {% for item in order_items %}
+                            {% for i in item %}
+                                {%  if i.order == open_order %}
+                                <li class="text-left">{{ i }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                    <a href="{% url 'complete_order' open_order.id %}" class="btn btn-sm btn-outline-secondary float-right">mark as completed</a>
+                </div>
+            </div>
+            {% endfor %}
+          </div>
+      </div> 
+    </div>
+</section>
+{% endblock %}

@@ -123,5 +123,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Stripe config
 STRIPE_PUBLISHABLE_KEY = 'pk_test_b2xe8TdAc4ZjLq62FGl5rM9100TufgXyo7'
 STRIPE_SECRET_KEY = 'sk_test_AY5aFJsfurlPoq8OuTchteRE00pE9DActW'
+
+# Email config
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'pizzaiolo50w@gmail.com'
+EMAIL_HOST_PASSWORD = 'pizza@50'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

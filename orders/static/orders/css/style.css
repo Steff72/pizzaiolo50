@@ -35,6 +35,14 @@ img {
   padding-top: 6rem;
 }
 
+#order_history, #order_list, #order_view, #thankyou {
+  background: url(../img/pizza6.jpg) no-repeat center fixed/cover;
+  position: relative;
+  min-height: 650px;
+  color: #fff;
+  padding-top: 6rem;
+}
+
 #menu a {
   color: black;
 }
@@ -98,6 +106,7 @@ img {
   position: relative;
   overflow: hidden;
 }
+
 #services::before {
   content: '';
   position: absolute;
@@ -106,4 +115,17 @@ img {
   min-height: 100%;
   width: 100%;
   background: rgba(70, 42, 10, 0.8);
+}
+
+.stripe-button-el {
+  width: 100% !important;
+  display: block !important;
+  background-color: #868e96 !important;
+  margin-top: 5px;
+}
+
+.stripe-button-el span {
+  height: 36px !important;
+  font-family: 'Roboto', sans-serif !important;
+  font-size: 16px !important;
 }

@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% load static %} {% block title %} | Order view{% endblock %} {% block content %}
+<section id="order_view">
+    <div class="container">
+      <div class="row text-center">
+          <div class="col-10 mx-auto">
+            <div class="card mb-5">
+                <div class="card-header text-dark">
+                    <h5>Order: {{ order.id }}</h5> 
+                </div>
+                <div class="card-body text-dark">
+                    {% if order_items %}
+                    <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for order_item in order_items %}
+                            <tr>
+                              <td class="text-left">{{ order_item.product }}</td>
+                              <td>{{ order_item.quantity }}</td>
+                              <td>{{ order_item.price }}</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    {% else %}
+                      <p>No Items in this Order.
+                      </p>
+                    {% endif %}
+                </div>
+            </div>
+          </div>
+      </div> 
+    </div>
+</section>
+{% endblock %}

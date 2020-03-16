@@ -47,6 +47,10 @@ def register(request):
 
 def login(request):
     if request.method == 'POST':
+        # store session key in session cart to access cart after login
+        cart = request.session.session_key
+        
+        
         # get form entries
         username = request.POST['username']
         password = request.POST['password']
@@ -56,6 +60,8 @@ def login(request):
         if user is not None:
             # success
             auth.login(request, user)
+            # set previos sessionkey to session.cart
+            request.session['cart'] = cart
             messages.success(request, 'Successfully logged in!')
             return redirect('index')
 

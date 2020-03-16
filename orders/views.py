@@ -1,7 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from . models import SpecialPizza, Category, Product, Topping, Cart, CartItem
+from . models import SpecialPizza, Category, Product, Topping, Cart, CartItem, Order, OrderItem
 from django.core.exceptions import ObjectDoesNotExist
-from decimal import *
+from decimal import Decimal
+import stripe
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 
 def index(request):
@@ -47,10 +52,13 @@ def detail(request, slug):
 
 
 def _cart_id(request):
+    if request.session.get('cart'):
+        cart = request.session['cart']
+    else:
         cart = request.session.session_key
         if not cart:
-                cart = request.session.create()
-        return cart
+            cart = request.session.create()
+    return cart
 
 
 def add_cart(request, product_id):
@@ -122,14 +130,132 @@ def cart_detail(request, counter=0, cart_items=None):
     except ObjectDoesNotExist:
         pass
 
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    stripe_total = int(total * 100)
+    description = 'Pizzaiolo50 - New Order'
+    data_key = settings.STRIPE_PUBLISHABLE_KEY
+    if request.method == 'POST':
+        try:
+            token = request.POST['stripeToken']
+            email = request.POST['stripeEmail']
+            customer = stripe.Customer.create(
+                email=email,
+                source=token
+            )
+            charge = stripe.Charge.create(
+                amount=stripe_total,
+                currency='usd',
+                description=description,
+                customer=customer.id
+            )
+            # Creating the order
+            try:
+                order_details = Order.objects.create(
+                    token=token,
+                    total=total,
+                    emailAddress=email,
+                )
+                order_details.save()
+
+                for cart_item in cart_items:
+                    # adjust price for sub with xtra cheese
+                    if cart_item.extra_cheese:
+                            price=(cart_item.product.price + Decimal(0.5))
+                    else:
+                        price=cart_item.product.price
+
+                    # adjust product name for toppings and xtra cheese
+                    product = f'{cart_item.product}'
+                    if cart_item.topping_1:
+                        product = f'{product}, {cart_item.topping_1}'
+                        if cart_item.topping_2:
+                            product = f'{product}, {cart_item.topping_2}'
+                            if cart_item.topping_3:
+                                product = f'{product}, {cart_item.topping_3}'
+                    if cart_item.extra_cheese:
+                        product = f'{product}, extra-cheese'
+
+                    # create OrderItem
+                    or_item = OrderItem.objects.create(
+                        product=product,
+                        quantity=cart_item.quantity,
+                        price=price,
+                        order=order_details
+                    )
+                    or_item.save()
+                    cart_item.delete()
+
+                # send email
+                send_mail(
+                    'Pizzaiolo50 Order',
+                    'Thank you for ordering at Pizzaiolo50! \nOrder Id is ' 
+                    + str(order_details.id) + '.\n It will be ready in 10 - 15 minutes.\n Enjoy your meal!',
+                    'pizzaiolo50w@gmail.com',
+                    [email, 'pizzaiolo50w@gmail.com'],
+                    fail_silently=False,
+                )
+                
+                return redirect('thankyou', order_details.id)
+            except ObjectDoesNotExist:
+                pass
+
+        except stripe.error.CardError as e:
+            return False, e
+
     context = {
         'cart_items': cart_items,
         'total': total,
-        'counter': counter
-    }
+        'counter': counter,
+        'data_key': data_key,
+        'stripe_total': stripe_total,
+        'description': description
+        }
 
     return render(request, 'orders/cart.html', context)
 
 
-def cart(request):
-    return render(request, 'orders/cart.html')
+def thankyou(request, order_id):
+    if order_id:
+        customer_order = get_object_or_404(Order, id=order_id)
+    return render(request, 'orders/thankyou.html', {'customer_order': customer_order})
+
+
+@login_required(redirect_field_name='next', login_url='login')
+def orderHistory(request):
+    if request.user.is_authenticated:
+        email = str(request.user.email)
+        order_details = Order.objects.filter(emailAddress=email)
+    return render(request, 'orders/order_history.html', {'order_details': order_details})
+
+
+@login_required(redirect_field_name='next', login_url='login')
+def viewOrder(request, order_id):
+    if request.user.is_authenticated:
+        email = str(request.user.email)
+        order = Order.objects.get(id=order_id, emailAddress=email)
+        order_items = OrderItem.objects.filter(order=order)
+    return render(request, 'orders/order_view.html', {'order': order, 'order_items': order_items})
+
+
+@login_required(redirect_field_name='next', login_url='login')
+def orderList(request):
+    if request.user.is_staff:
+        orders = []
+        open_orders = Order.objects.filter(status='Paid').order_by('created')
+        for o in open_orders:
+            orders.append(OrderItem.objects.filter(order=o)) 
+        return render(request, 'orders/order_list.html', {'order_items': orders, 'open_orders': open_orders})
+    else:
+        return redirect('index')
+
+
+@login_required(redirect_field_name='next', login_url='login')
+def completeOrder(request, order_id):
+    if request.user.is_staff:
+        order = Order.objects.get(id=order_id)
+        order.status = 'Ready'
+        order.save()
+        messages.success(request, 'Order completed')
+        return redirect('order_list')
+    else:
+        return redirect('index')

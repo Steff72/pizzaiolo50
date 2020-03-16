@@ -89,9 +89,27 @@
                             <a href="{% url 'index' %}" class="btn btn-outline-secondary btn-block">
                                 Continue shopping
                             </a>
-                            <a href="{% url 'index' %}" class="btn btn-outline-danger btn-block">
-                                Confirm order
+                            {% if user.is_authenticated %}
+                            <form class="" action="" method="POST">
+                                {% csrf_token %}
+                                <script src="https://checkout.stripe.com/checkout.js"
+                                class="stripe-button"
+                                data-key="{{ data_key }}"
+                                data-amount="{{ stripe_total }}"
+                                data-name="Pizzaiolo50"
+                                data-description="{{ description }}"
+                                data-locale="auto"
+                                data-currency="usd"
+                                data-shipping-address="false"
+                                data-billing-address="false"
+                                data-zip-code="false">
+                                </script>
+                            </form>
+                            {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-block">
+                                Please Login to place an order!
                             </a>
+                            {% endif %}
                         </div>
                       </div>
                   </div>

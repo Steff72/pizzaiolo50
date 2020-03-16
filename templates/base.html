@@ -44,18 +44,37 @@
             </ul>
       
             <ul class="navbar-nav ml-auto">
-              <li class="nav-item mr-3">
+              <li 
+              {% if 'cart' in request.path %}
+              class="nav-item active mr-3"
+              {% else %}
+              class="nav-item mr-3"
+              {% endif %}
+              >
                 <a class="nav-link" href="{% url 'cart_detail' %}"> <i class="fas fa-shopping-cart"> ({{ item_count }})</i></a>
               </li>
-              {% if user.is_authenticated %}
+              {% if user.is_staff %}
                 <li 
-                {% if 'dashboard' in request.path %}
+                {% if 'order_list' in request.path %}
                 class="nav-item active mr-3"
                 {% else %}
                 class="nav-item mr-3"
                 {% endif %}
                 >
-                  <a class="nav-link" href="{% url 'index' %}">Welcome {{ user.username }}  (Dashboard)</a>
+                  <a class="nav-link" href="{% url 'order_list' %}">Staff:  Order List</a>
+                </li>
+                <li class="nav-item mr-3">
+                    <a class="nav-link" href="{% url 'logout' %}"> <i class="fas fa-sign_out-alt"> Logout</i></a>
+                </li>
+              {% elif user.is_authenticated %}
+                <li 
+                {% if 'order_history' in request.path %}
+                class="nav-item active mr-3"
+                {% else %}
+                class="nav-item mr-3"
+                {% endif %}
+                >
+                  <a class="nav-link" href="{% url 'order_history' %}">{{ user.username }}'s  Order History</a>
                 </li>
                 <li class="nav-item mr-3">
                     <a class="nav-link" href="{% url 'logout' %}"> <i class="fas fa-sign_out-alt"> Logout</i></a>
@@ -87,6 +106,20 @@
           </div>
         </div>
       </nav>
+
+    <!-- Messages -->
+    {% if messages %} {% for message in messages %}
+    <div id="message" class="container">
+      <div class="alert alert-secondary alert-dismissible text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+        <strong>
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} Error: {% else %} {{ message.tags|title }} {% endif %}
+        </strong>
+        {{ message }}
+      </div>
+    </div>
+    {% endfor %} {% endif %}
+
 
     <!-- Main content -->
     {% block content %} {% endblock %}
