@@ -192,7 +192,7 @@ def cart_detail(request, counter=0, cart_items=None):
                     + str(order_details.id) + '.\n It will be ready in 10 - 15 minutes.\n Enjoy your meal!',
                     'pizzaiolo50w@gmail.com',
                     [email, 'pizzaiolo50w@gmail.com'],
-                    fail_silently=False,
+                    fail_silently=True,
                 )
                 
                 return redirect('thankyou', order_details.id)
